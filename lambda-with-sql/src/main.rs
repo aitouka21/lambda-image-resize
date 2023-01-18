@@ -1,16 +1,10 @@
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
 #[derive(Deserialize)]
 struct Request {
     num: i64,
-}
-
-#[derive(Serialize)]
-struct Response {
-    req_id: String,
-    msg: String,
 }
 
 #[tokio::main]
