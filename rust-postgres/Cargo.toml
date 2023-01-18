@@ -25,6 +25,6 @@ serde = "1.0.136"
 tokio = { version = "1", features = ["macros"] }
 tracing = { version = "0.1", features = ["log"] }
 native-tls = { version = "0.2.11", features = ["vendored"] }
-sqlx = { version = "0.6", features = [ "runtime-tokio-native-tls" , "postgres" ] }
+sqlx = { version = "0.6", features = [ "runtime-tokio-native-tls" , "postgres", "macros" ] }
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "json"] }
 

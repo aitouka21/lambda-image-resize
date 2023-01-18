@@ -2,6 +2,12 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::Deserialize;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
+#[derive(sqlx::FromRow)]
+struct Country {
+    country: String,
+    count: i64,
+}
+
 #[derive(Deserialize)]
 struct Request {
     num: i64,
@@ -28,11 +34,12 @@ async fn main() -> Result<(), Error> {
 async fn function_handler(event: LambdaEvent<Request>, pool: &Pool<Postgres>) -> Result<(), Error> {
     let Request { num } = event.payload;
 
-    let row: (i64,) = sqlx::query_as("SELECT $1")
+    sqlx::query_as::<_, Country>("SELECT * FROM country WHERE count > ?")
         .bind(num)
-        .fetch_one(pool)
-        .await?;
+        .fetch_all(pool)
+        .await?
+        .iter()
+        .for_each(|country| println!("country = {}, count = {}", country.country, country.count));
 
-    assert_eq!(row.0, num);
     Ok(())
 }
