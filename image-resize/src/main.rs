@@ -1,8 +1,5 @@
-use std::io::Cursor;
-
 use image::GenericImageView;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-
 use s3::{creds::Credentials, Bucket};
 use serde::Deserialize;
 
@@ -72,8 +69,11 @@ fn resize(img: &[u8]) -> Vec<u8> {
     tracing::info!(new_dimensions = ?dimensions);
 
     let mut bytes: Vec<u8> = Vec::new();
-    img.write_to(&mut Cursor::new(&mut bytes), image::ImageOutputFormat::Png)
-        .unwrap();
+    img.write_to(
+        &mut std::io::Cursor::new(&mut bytes),
+        image::ImageOutputFormat::Png,
+    )
+    .unwrap();
 
     tracing::info!("resize done");
     bytes
