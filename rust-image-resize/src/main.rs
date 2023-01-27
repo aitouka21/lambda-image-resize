@@ -32,7 +32,7 @@ async fn main() -> Result<(), Error> {
 async fn function_handler(event: LambdaEvent<Request>, bucket: &Bucket) -> Result<(), Error> {
     let Request { key } = event.payload;
 
-    match key.split(".").last() {
+    match key.split('.').last() {
         Some("png") => {}
         _ => panic!("only accept png for testing"),
     }
@@ -55,7 +55,7 @@ async fn function_handler(event: LambdaEvent<Request>, bucket: &Bucket) -> Resul
 }
 
 fn resize(img: &[u8]) -> Vec<u8> {
-    let img = image::load_from_memory_with_format(&img, image::ImageFormat::Png)
+    let img = image::load_from_memory_with_format(img, image::ImageFormat::Png)
         .expect("failed to load image");
 
     let dimensions = img.dimensions();
